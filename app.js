@@ -1,10 +1,19 @@
-//let imageIndex = 0; // Initiate with 0
-
+let response = ''
 /**
  * Method called on click event of the generate button
  */
 function generateQuote() {
     bgImageGenerator();
+    getQuotes().then(data => {
+        response = data.quotes;
+        let quoteIndex = generateRandomNumber(response.length - 1, 0);
+        let quoteObject = response[quoteIndex];
+        let quoteElement = document.querySelector('.quote-content');
+        let quoteAuthorElement = document.querySelector('.quote-author');
+        quoteElement.innerHTML = quoteObject.quote;
+        quoteAuthorElement.innerHTML = `~ ${quoteObject.author}`
+
+    })
 }
 
 /**
@@ -34,6 +43,13 @@ function bgImageGenerator() {
     let bgImageUrl = ['assets/img/image1.jpeg', 'assets/img/image2.jpeg', 'assets/img/image3.jpeg', 'assets/img/image4.jpg', 'assets/img/image5.jpg', 'assets/img/image6.jpg', 'assets/img/image7.jpg', 'assets/img/image8.jpg'];
     let imageIndex = generateRandomNumber(bgImageUrl.length - 1, 0);
     bgImageElement.setAttribute('style', `background-image: url(${bgImageUrl[imageIndex]})`);
+}
+
+
+function getQuotes() {
+    return fetch('quotes.json').then(res => {
+        return res.json();
+    })
 }
 
 
